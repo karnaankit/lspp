@@ -1,0 +1,39 @@
+name: Backend Workflow
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend.yml'
+
+jobs:
+  Build-Backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build docker image
+        run: docker build -t akarna.azurecr.io/backend:latest -f Dockerfile.express .
+        working-directory: ./backend
+
+      - name: Azure Login
+        uses: Azure/login@v2.2.0
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Push docker image to Azure Container Registry
+        run: |
+          az acr login --name akarna
+          docker push akarna.azurecr.io/backend:latest
+        working-directory: ./backend
+
+      - name: Force new deployment
+        run: |
+          az containerapp revision restart \
+          -n ${{ secrets.APP_NAME }} -g ${{ secrets.RG_NAME }} \
+          --revision $(az containerapp revision list -n ${{ secrets.APP_NAME }} -g ${{ secrets.RG_NAME }} --query "[0].name" --output tsv)
+        working-directory: ./backend
