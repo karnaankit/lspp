@@ -1,0 +1,38 @@
+name: Frontend Workflow
+
+on:
+  push:
+    branches:
+      - main
+  paths:
+    - 'frontend/**'
+    - '.github/workflows/frontend.yml'
+
+jobs:
+    Build Frontend:
+      runs-on: ubuntu-latest
+      working-directory: ./frontend
+
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Setup Node.js
+          uses: actions/setup-node@v4
+          with:
+          node-version: '20'
+
+        - name: Install dependencies
+          run: yarn
+
+        - name: Build
+          run: yarn build
+
+        - name: Deploy
+          run: |
+            echo "Deploying to Azure Storage Account"
+            az storage blob upload-batch --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }} \
+            --account-key ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }} \
+            --destination ${{ secrets.AZURE_STORAGE_CONTAINER_NAME }} \
+            --source ./build \
+            --overwrite
