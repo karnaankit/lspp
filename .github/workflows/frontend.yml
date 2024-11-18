@@ -11,7 +11,6 @@ on:
 jobs:
     Build Frontend:
       runs-on: ubuntu-latest
-      working-directory: ./frontend
 
       steps:
         - name: Checkout code
@@ -24,9 +23,11 @@ jobs:
 
         - name: Install dependencies
           run: yarn
+          working-directory: ./frontend
 
         - name: Build
           run: yarn build
+          working-directory: ./frontend
 
         - name: Deploy
           run: |
@@ -36,3 +37,4 @@ jobs:
             --destination ${{ secrets.AZURE_STORAGE_CONTAINER_NAME }} \
             --source ./build \
             --overwrite
+          working-directory: ./frontend
