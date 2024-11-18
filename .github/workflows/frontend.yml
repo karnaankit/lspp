@@ -9,7 +9,7 @@ on:
       - '.github/workflows/frontend.yml'
 
 jobs:
-    Build Frontend:
+    Build-Frontend:
       runs-on: ubuntu-latest
 
       steps:
