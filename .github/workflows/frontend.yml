@@ -28,6 +28,8 @@ jobs:
         - name: Build
           run: yarn build
           working-directory: ./frontend
+          env:
+            VITE_ENV: 'prod'
 
         - name: Deploy
           run: |

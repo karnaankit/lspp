@@ -2,13 +2,20 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../App.css';
 
+let baseURL;
+if (import.meta.env.VITE_ENV === 'prod') {
+  baseURL = 'https://todo.akarna.tech';
+}
+else {
+    baseURL = 'http://localhost:5000';
+}
 
 function App() {
   const [data, setData] = useState([])
   const [newTask, setNewTask] = useState('')
 
   useEffect(() => {
-    axios.get('https://akarna.tech/todo')
+    axios.get(`${baseURL}/todo`)
       .then(response => setData(response.data.todo));
           
   }, []);
@@ -16,7 +23,7 @@ function App() {
   const handleDelete = (id) => {
     const confirmDelete = confirm('Are you sure?');
     if (confirmDelete) {
-      axios.delete(`https://akarna.tech/todo/${id}`)
+      axios.delete(`${baseURL}/todo/${id}`)
           .then(() => {
             window.location.reload()
           })
@@ -28,7 +35,7 @@ function App() {
   }
   const handleNewTaskSubmit = (event) => {
     event.preventDefault();
-    axios.post('https://akarna.tech/todo', { task: newTask })
+    axios.post(`${baseURL}/todo`, { task: newTask })
         .then(() => {
           window.location.reload()
         })
@@ -38,7 +45,7 @@ function App() {
     const task = item.task;
     const newTask = prompt('Enter new task name', task);
     const completed = confirm('Is the task completed?');
-    axios.put(`https://akarna.tech/todo/${item.id}`, { task: newTask, completed: completed })
+    axios.put(`${baseURL}/todo/${item.id}`, { task: newTask, completed: completed })
         .then(() => {
           window.location.reload()
         })
