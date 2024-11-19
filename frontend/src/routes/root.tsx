@@ -4,7 +4,7 @@ import '../App.css';
 
 let baseURL;
 if (import.meta.env.VITE_ENV === 'prod') {
-  baseURL = 'https://todo.akarna.tech';
+  baseURL = 'https://akarna.tech';
 }
 else {
     baseURL = 'http://localhost:5000';
