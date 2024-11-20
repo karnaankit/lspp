@@ -5,7 +5,6 @@
 1. Create a `.env` file in the root directory of the project.
 2. Copy the contents of `.env.example` into the newly created `.env` file.
 3. Fill in the necessary environment variables in the `.env` file.
-4. Ensure that 
 
 ## Using Docker Compose
 
