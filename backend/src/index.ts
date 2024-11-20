@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('API is healthy....');
+  res.send('API is running....');
 });
 
 app.use(appRouter);
